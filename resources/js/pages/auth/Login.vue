@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,8 @@ defineProps<{
     canResetPassword: boolean;
 }>();
 
+const loadingLoginGoogle = ref(false);
+
 const form = useForm({
     email: '',
     password: '',
@@ -25,6 +28,11 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+const handleLoginGoogle = () => {
+    loadingLoginGoogle.value = true;
+    window.location.href = '/login-sso'
+}
 </script>
 
 <template>
@@ -83,11 +91,23 @@ const submit = () => {
                     Log in
                 </Button>
             </div>
-
-            <div class="text-center text-sm text-muted-foreground">
-                Don't have an account?
-                <TextLink :href="route('register')" :tabindex="5">Sign up</TextLink>
-            </div>
         </form>
+        <div>
+            <p class="text-center">Or</p>
+            <Button
+                @click="handleLoginGoogle"
+                class="w-full my-6 flex flex-row items-center justify-between"
+                :disabled="loadingLoginGoogle"
+            >
+                <LoaderCircle v-if="loadingLoginGoogle" class="h-4 w-4 animate-spin" />
+                <img v-else class="w-6 h-6" src="/images/google.svg" alt="google logo">
+                <span class="text-center">Login with Google</span>
+                <div class="w-6 h-6"></div>
+            </Button>
+        </div>
+        <div class="text-center text-sm text-muted-foreground">
+            Don't have an account?
+            <TextLink :href="route('register')" :tabindex="5">Sign up</TextLink>
+        </div>
     </AuthBase>
 </template>

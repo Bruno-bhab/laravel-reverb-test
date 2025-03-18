@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 const form = useForm({
     name: '',
@@ -15,11 +16,18 @@ const form = useForm({
     password_confirmation: '',
 });
 
+const loadingLoginGoogle = ref(false);
+
 const submit = () => {
     form.post(route('register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+
+const handleLoginGoogle = () => {
+    loadingLoginGoogle.value = true;
+    window.location.href = '/login-sso'
+}
 </script>
 
 <template>
@@ -73,11 +81,23 @@ const submit = () => {
                     Create account
                 </Button>
             </div>
-
-            <div class="text-center text-sm text-muted-foreground">
-                Already have an account?
-                <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="6">Log in</TextLink>
-            </div>
         </form>
+        <div>
+            <p class="text-center">Or</p>
+            <Button
+                @click="handleLoginGoogle"
+                class="w-full my-6 flex flex-row items-center justify-between"
+                :disabled="loadingLoginGoogle"
+            >
+                <LoaderCircle v-if="loadingLoginGoogle" class="h-4 w-4 animate-spin" />
+                <img v-else class="w-6 h-6" src="/images/google.svg" alt="google logo">
+                <span class="text-center">Register with Google</span>
+                <div class="w-6 h-6"></div>
+            </Button>
+        </div>
+        <div class="text-center text-sm text-muted-foreground">
+            Already have an account?
+            <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="6">Log in</TextLink>
+        </div>
     </AuthBase>
 </template>

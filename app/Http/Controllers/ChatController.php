@@ -13,9 +13,18 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $messages = Message::latest()->paginate(10);
-        dd($messages);
-        return Inertia::render('Dashboard');
+        $messages = Message::with(['user'])->get();
+        $userId = auth()->user()->id;
+
+        $formattedMessages = $messages->map(function ($message) use ($userId) {
+            return [
+                ...$message->toArray(),
+                'user_name' => $message->user->name,
+                'user' => $message->user_id === $userId ? 'self' : 'other'
+            ];
+        });
+
+        return Inertia::render('Dashboard', ['messages' => $formattedMessages]);
     }
 
     /**

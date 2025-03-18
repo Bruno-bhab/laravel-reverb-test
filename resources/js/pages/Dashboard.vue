@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SendHorizonal, LoaderCircle } from 'lucide-vue-next';
 import { ref } from 'vue';
+import MessageBlock from '@/components/chat/MessageBlock.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,24 +21,32 @@ const form = useForm({
 
 const messages = ref([
     {
+        id: 1,
         user_id: 1,
         user_name: "Fulano",
-        message: "Olha esse novo chat que legal!"
+        message: "Olha esse novo chat que legal!",
+        user: "other"
     },
     {
+        id: 2,
         user_id: 2,
         user_name: "Ciclano",
-        message: "Olha esse novo chat que legal!"
+        message: "Olha esse novo chat que legal!",
+        user: "self"
     },
     {
+        id: 3,
         user_id: 3,
         user_name: "Beltrano",
-        message: "Olha esse novo chat que legal!"
+        message: "Olha esse novo chat que legal!",
+        user: "other"
     },
     {
+        id: 4,
         user_id: 4,
         user_name: "Tralano",
-        message: "Olha esse novo chat que legal!"
+        message: "Olha esse novo chat que legal!",
+        user: "other"
     }
 ])
 
@@ -54,8 +63,13 @@ const submit = () => {
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min
             flex flex-col
             ">
-               <div class="flex-1 bg-red-900">
-
+               <div class="flex-1 p-8">
+                    <div class="flex flex-col w-full min-h-full gap-6">
+                        <template v-if="messages">
+                            <MessageBlock  v-for="message of messages" :info="message" :key="message.id"/>
+                        </template>
+                        <span v-else>No messages</span>
+                    </div>
                </div>
                <div class="bg-zinc-800 flex items-center justify-center px-4 py-4">
                     <form @submit.prevent="submit" class="w-full flex gap-8 items-center justify-between">

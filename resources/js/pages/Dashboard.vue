@@ -50,8 +50,8 @@ const submit = () => {
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min
             flex flex-col justify-between
             ">
-               <div class="flex-1 p-8 max-h-[80vh] overflow-y-scroll">
-                    <div id="chat-scroll" class="flex flex-col w-full h-full gap-6">
+               <div class="flex-1 py-4 px-2">
+                    <div id="chat-scroll" class="flex flex-col w-full h-full gap-6 p-4 max-h-[73vh] overflow-y-auto">
                         <template v-if="messages">
                             <MessageBlock  v-for="message of messages" :info="message" :key="message.id"/>
                         </template>
@@ -77,3 +77,25 @@ const submit = () => {
         </div>
     </AppLayout>
 </template>
+
+<style>
+/* Personalização da barra de rolagem com Tailwind e CSS customizado */
+#chat-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-scroll::-webkit-scrollbar-thumb {
+    background-color: #d6d6d6;
+    border-radius: 10px;
+}
+
+#chat-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+#chat-scroll::-webkit-scrollbar-track {
+    background: #888;
+    border-radius: 10px;
+}
+
+</style>

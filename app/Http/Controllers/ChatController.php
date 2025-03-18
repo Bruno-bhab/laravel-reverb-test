@@ -40,7 +40,16 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'message' => ['required','string'],
+        ]);
+
+        Message::create([
+            'message'=> $validated['message'],
+            'user_id'=> auth()->user()->id,
+        ]);
+
+        return back();
     }
 
     /**

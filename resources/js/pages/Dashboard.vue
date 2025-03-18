@@ -29,7 +29,16 @@ const form = useForm({
 defineProps<{ messages: Array<IMessage> }>()
 
 const submit = () => {
-    form.post(route('login'));
+    form.post(route('chat.store'), {
+        preserveScroll: false,
+        onSuccess: () => {
+            const chatScrollDiv = document.getElementById('chat-scroll');
+            if (chatScrollDiv) {
+                form.reset('message')
+                chatScrollDiv.scrollTop = chatScrollDiv.scrollHeight;
+            }
+        }
+    });
 };
 
 </script>
@@ -39,10 +48,10 @@ const submit = () => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min
-            flex flex-col
+            flex flex-col justify-between
             ">
-               <div class="flex-1 p-8">
-                    <div class="flex flex-col w-full min-h-full gap-6 max-h-[70vh] overflow-y-scroll">
+               <div class="flex-1 p-8 max-h-[80vh] overflow-y-scroll">
+                    <div id="chat-scroll" class="flex flex-col w-full h-full gap-6">
                         <template v-if="messages">
                             <MessageBlock  v-for="message of messages" :info="message" :key="message.id"/>
                         </template>

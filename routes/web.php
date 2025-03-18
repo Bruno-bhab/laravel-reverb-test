@@ -10,6 +10,7 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard',[ChatController::class, 'index'])->name('dashboard');
+    Route::post('chat/send',[ChatController::class, 'store'])->name('chat.store');
 });
 
 require __DIR__.'/settings.php';
